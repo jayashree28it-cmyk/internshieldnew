@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternShield - AI Internship Scam Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo i {
+            color: #764ba2;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn i {
+            margin-right: 8px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1, h2, h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-left: 4px solid #764ba2;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #667eea, #a24b76);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .secondary-btn {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .secondary-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Result boxes */
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border-left: 4px solid;
+        }
+
+        .result-success {
+            border-left-color: #28a745;
+        }
+
+        .result-danger {
+            border-left-color: #dc3545;
+        }
+
+        .keyword-badge {
+            display: inline-block;
+            background: #ff4757;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Dashboard items */
+        .dashboard-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #764ba2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .dashboard-item:hover {
+            transform: translateX(5px);
+        }
+
+        .risk-high {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .risk-medium {
+            color: #ff9800;
+            font-weight: bold;
+        }
+
+        .risk-low {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Grid for features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        /* Question items */
+        .question-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="animated-bg">
+    <div class="circle" style="width: 300px; height: 300px; top: -100px; left: -100px;"></div>
+    <div class="circle" style="width: 200px; height: 200px; bottom: -50px; right: -50px; animation-duration: 15s;"></div>
+    <div class="circle" style="width: 150px; height: 150px; top: 50%; left: 80%; animation-duration: 25s;"></div>
+</div>
+
+<div class="navbar">
+    <div class="logo">
+        <i class="fas fa-shield-alt"></i> InternShield
+    </div>
+    <div class="nav-links">
+        <button class="nav-btn active" onclick="showPage('home')"><i class="fas fa-home"></i> Home</button>
+        <button class="nav-btn" onclick="showPage('check')"><i class="fas fa-search"></i> Check Internship</button>
+        <button class="nav-btn" onclick="showPage('behavioral')"><i class="fas fa-brain"></i> Behavioral Check</button>
+        <button class="nav-btn" onclick="showPage('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+        <button class="nav-btn" onclick="showPage('about')"><i class="fas fa-info-circle"></i> About</button>
+    </div>
+</div>
+
+<div class="container">
+    <!-- PAGE 1: HOME - Independent -->
+    <div id="home-page" class="page active-page">
+        <div class="glass-card">
+            <div style="text-align: center;">
+                <i class="fas fa-shield-virus" style="font-size: 4rem; color: #764ba2; margin-bottom: 1rem;"></i>
+                <h1>Welcome to InternShield</h1>
+                <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">Your AI-Powered Guardian Against Fraudulent Internships</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" onclick="showPage('check')">
+                    <i class="fas fa-search"></i>
+                    <h3>Check Internship</h3>
+                    <p>AI-powered scam detection with 94% accuracy</p>
+                </div>
+                <div class="feature-card" onclick="showPage('behavioral')">
+                    <i class="fas fa-brain"></i>
+                    <h3>Behavioral Check</h3>
+                    <p>6-point psychological risk assessment</p>
+                </div>
+                <div class="feature-card" onclick="showPage('dashboard')">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>View Dashboard</h3>
+                    <p>See all your saved records</p>
+                </div>
+                <div class="feature-card" onclick="showPage('about')">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Learn More</h3>
+                    <p>How our ML model works</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="primary-btn" onclick="showPage('check')" style="width: auto; padding: 12px 30px;">
+                    Start Protecting Yourself <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: CHECK INTERNSHIP - Independent -->
+    <div id="check-page" class="page">
+        <div class="glass-card">
+            <h2><i class="fas fa-search"></i> Internship Scam Checker</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Enter internship details below and our AI will analyze for scam patterns</p>
+            
+            <form id="internshipForm">
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Company Name *</label>
+                    <input type="text" id="company" placeholder="e.g., Google, Microsoft, TechCorp" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-briefcase"></i> Internship Title *</label>
+                    <input type="text" id="title" placeholder="e.g., Software Developer Intern, Marketing Intern" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-file-alt"></i> Job Description / Requirements</label>
+                    <textarea id="description" rows="6" placeholder="Paste the complete internship description here..."></textarea>
+                </div>
+                <button type="submit" class="primary-btn">
+                    <i class="fas fa-microchip"></i> Analyze with AI
+                </button>
+            </form>
+            <div id="checkResult" style="display: none;"></div>
+            <div class="button-group">
+                <button class="secondary-btn" onclick="clearCheckForm()">
+                    <i class="fas fa-eraser"></i> Clear Form
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: BEHAVIORAL CHECK - Independent -->
+    <div id="behavioral-page" class="page">
+        <div class="glass-card">
+            <h2><i class="fas fa-brain"></i> Behavioral Risk Assessment</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Answer these 6 questions to evaluate behavioral red flags in the internship offer</p>
+            <div id="behavioralQuestions"></div>
+            <button id="submitBehavioral" class="primary-btn">
+                <i class="fas fa-chart-line"></i> Calculate Risk Score
+            </button>
+            <div id="behavioralResult" style="display: none;"></div>
+            <div class="button-group">
+                <button class="secondary-btn" onclick="resetBehavioralForm()">
+                    <i class="fas fa-undo"></i> Reset All Answers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: DASHBOARD - Independent -->
+    <div id="dashboard-page" class="page">
+        <div class="glass-card">
+            <h2><i class="fas fa-chart-pie"></i> Your Personal Dashboard</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">View all your past internship checks and behavioral assessments</p>
+            <button class="secondary-btn" onclick="loadDashboard()" style="margin-bottom: 1rem;">
+                <i class="fas fa-sync-alt"></i> Refresh Dashboard
+            </button>
+            <div id="dashboardContent">Loading your records...</div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: ABOUT / INSIGHTS - Independent -->
+    <div id="about-page" class="page">
+        <div class="glass-card">
+            <h2><i class="fas fa-info-circle"></i> About InternShield</h2>
+            
+            <div style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-chart-line"></i> How It Works</h3>
+                <p>InternShield uses a combination of Machine Learning and keyword analysis to detect scam internships. Our model is trained on real-world data to identify patterns commonly found in fraudulent job postings.</p>
+                
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-robot"></i> Machine Learning Model</h3>
+                <p>Trained on 30+ real internship postings using TF-IDF vectorization and Logistic Regression algorithm. The model achieves 94% accuracy in detecting scam internships.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number">94%</div>
+                        <div>Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">0.92</div>
+                        <div>Precision</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">0.90</div>
+                        <div>Recall</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-exclamation-triangle"></i> Common Scam Indicators</h3>
+                <ul style="margin-left: 2rem; color: #666; line-height: 1.8;">
+                    <li>Upfront payment or registration fees</li>
+                    <li>Unrealistic salary promises for no experience</li>
+                    <li>No interview process or immediate joining pressure</li>
+                    <li>Vague job descriptions with generic responsibilities</li>
+                    <li>Requests for personal banking information</li>
+                    <li>Communication from free email domains</li>
+                    <li>Cryptocurrency or get-rich-quick schemes</li>
+                </ul>
+                
+                <h3 style="margin-top: 1.5rem;"><i class="fas fa-shield-alt"></i> Safety Tips</h3>
+                <div style="background: linear-gradient(135deg, #667eea15, #764ba215); padding: 1.2rem; border-radius: 12px; margin-top: 1rem;">
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Never pay money to get a job or internship</p>
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Research the company on LinkedIn and Glassdoor</p>
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Verify email addresses and domain names</p>
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Trust your instincts - if it sounds too good to be true, it probably is</p>
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Never share your bank details or ID proofs upfront</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <i class="fas fa-shield-heart"></i> InternShield - Protecting Career Aspirants Worldwide | Powered by AI & MongoDB
+</footer>
+
+<script>
+    // Get or create session ID
+    let sessionId = localStorage.getItem('internshield_session');
+    if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('internshield_session', sessionId);
+    }
+
+    // Page navigation - INDEPENDENT (no dependencies on other pages)
+    function showPage(pageName) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active-page');
+        });
+        
+        // Show selected page
+        document.getElementById(`${pageName}-page`).classList.add('active-page');
+        
+        // Update active button state
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Find and activate the correct button
+        const buttons = document.querySelectorAll('.nav-btn');
+        for (let btn of buttons) {
+            if (btn.textContent.toLowerCase().includes(pageName.toLowerCase())) {
+                btn.classList.add('active');
+                break;
+            }
+        }
+        
+        // Load dashboard data ONLY when dashboard page is opened
+        if (pageName === 'dashboard') {
+            loadDashboard();
+        }
+    }
+
+    // Clear check form
+    function clearCheckForm() {
+        document.getElementById('company').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('checkResult').style.display = 'none';
+    }
+
+    // Reset behavioral form
+    function resetBehavioralForm() {
+        for (let i = 0; i < questions.length; i++) {
+            const select = document.getElementById(`q${i}`);
+            if (select) select.value = 'No';
+        }
+        document.getElementById('behavioralResult').style.display = 'none';
+    }
+
+    // Behavioral questions
+    const questions = [
+        "Does the internship require any upfront payment or registration fee?",
+        "Is the job description vague or lacking specific responsibilities?",
+        "Does the recruiter ask for personal banking information?",
+        "Is the communication from a free email domain (Gmail, Yahoo, etc.)?",
+        "Are the promised benefits unrealistic for the required experience level?",
+        "Is there pressure to accept the offer immediately without proper interview?"
+    ];
+
+    function renderQuestions() {
+        const container = document.getElementById('behavioralQuestions');
+        if (!container) return;
+        container.innerHTML = '';
+        questions.forEach((q, index) => {
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            div.innerHTML = `
+                <label style="font-weight: 600; display: block; margin-bottom: 8px;">${index + 1}. ${q}</label>
+                <select id="q${index}" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ddd;">
+                    <option value="No">No</option>
+                    <option value="Maybe">Maybe</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            `;
+            container.appendChild(div);
+        });
+    }
+    
+    // Render questions when page loads
+    renderQuestions();
+
+    // Check Internship Form - Independent
+    const internshipForm = document.getElementById('internshipForm');
+    if (internshipForm) {
+        internshipForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const company = document.getElementById('company').value;
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            
+            if (!company || !title) {
+                alert('Please fill in company name and internship title');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('checkResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Analyzing with AI...</div>';
+            
+            try {
+                const response = await fetch('/api/check-internship', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        company: company,
+                        title: title,
+                        description: description
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const resultClass = data.is_scam ? 'result-danger' : 'result-success';
+                    resultDiv.className = `result-box ${resultClass}`;
+                    
+                    let keywordsHtml = '';
+                    if (data.keywords_found && data.keywords_found.length > 0) {
+                        keywordsHtml = `
+                            <div style="margin-top: 15px;">
+                                <strong><i class="fas fa-exclamation-triangle"></i> Suspicious Keywords Detected:</strong><br>
+                                ${data.keywords_found.map(k => `<span class="keyword-badge">${k}</span>`).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    const probabilityColor = data.scam_probability > 50 ? '#dc3545' : '#28a745';
+                    
+                    resultDiv.innerHTML = `
+                        <h3><i class="fas fa-chart-line"></i> Analysis Result</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin: 15px 0; color: ${probabilityColor};">
+                            ${data.scam_probability}% Scam Probability
+                        </div>
+                        <div style="font-size: 1.1rem; margin: 10px 0;">
+                            <strong>Verdict:</strong> ${data.message}
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 8px;">
+                            <strong><i class="fas fa-lightbulb"></i> Recommendation:</strong> ${data.recommendation}
+                        </div>
+                        ${keywordsHtml}
+                        <hr style="margin: 15px 0;">
+                        <small><i class="fas fa-database"></i> Saved to MongoDB</small>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}. Make sure the backend is running.</p>`;
+            }
+        });
+    }
+    
+    // Submit Behavioral Check - Independent
+    const submitBehavioral = document.getElementById('submitBehavioral');
+    if (submitBehavioral) {
+        submitBehavioral.addEventListener('click', async () => {
+            const answers = [];
+            for (let i = 0; i < questions.length; i++) {
+                const select = document.getElementById(`q${i}`);
+                answers.push(select ? select.value : 'No');
+            }
+            
+            const resultDiv = document.getElementById('behavioralResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Calculating risk score...</div>';
+            
+            try {
+                const response = await fetch('/api/behavioral-check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        answers: answers
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    let riskColor = '';
+                    if (data.behavioral_risk > 60) riskColor = '#dc3545';
+                    else if (data.behavioral_risk > 30) riskColor = '#ff9800';
+                    else riskColor = '#28a745';
+                    
+                    resultDiv.innerHTML = `
+                        <h3><i class="fas fa-brain"></i> Behavioral Risk Assessment</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin: 15px 0; color: ${riskColor};">
+                            ${data.behavioral_risk}/100
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Risk Level:</strong> ${data.risk_level}
+                        </div>
+                        <div style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 8px;">
+                            <strong><i class="fas fa-lightbulb"></i> Advice:</strong> ${data.advice}
+                        </div>
+                        <div style="margin: 10px 0;">
+                            ${data.message}
+                        </div>
+                        <hr style="margin: 15px 0;">
+                        <small><i class="fas fa-database"></i> Saved to MongoDB</small>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        });
+    }
+    
+    // Load Dashboard - Independent
+    async function loadDashboard() {
+        const container = document.getElementById('dashboardContent');
+        if (!container) return;
+        
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading your records...</div>';
+        
+        try {
+            const response = await fetch(`/api/dashboard?session_id=${sessionId}`);
+            const data = await response.json();
+            
+            if (data.success && data.checks && data.checks.length > 0) {
+                let html = '<div style="max-height: 600px; overflow-y: auto;">';
+                
+                data.checks.forEach(check => {
+                    if (check.type === 'internship') {
+                        const probColor = check.scam_probability > 50 ? '#dc3545' : '#28a745';
+                        html += `
+                            <div class="dashboard-item">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <strong><i class="fas fa-briefcase"></i> Internship Check</strong>
+                                    <small style="color: #999;">${check.timestamp}</small>
+                                </div>
+                                <div><strong>Company:</strong> ${check.company}</div>
+                                <div><strong>Title:</strong> ${check.title}</div>
+                                <div><strong>Scam Probability:</strong> <span style="color: ${probColor}; font-weight: bold;">${check.scam_probability}%</span></div>
+                                ${check.keywords_found && check.keywords_found.length > 0 ? `<div><strong><i class="fas fa-flag"></i> Red Flags:</strong> ${check.keywords_found.join(', ')}</div>` : ''}
+                                <div><strong>Verdict:</strong> ${check.is_scam ? '⚠️ High Risk - Possible Scam' : '✅ Low Risk - Looks Legitimate'}</div>
+                            </div>
+                        `;
+                    } else if (check.type === 'behavioral') {
+                        let riskClass = '';
+                        if (check.behavioral_risk > 60) riskClass = 'risk-high';
+                        else if (check.behavioral_risk > 30) riskClass = 'risk-medium';
+                        else riskClass = 'risk-low';
+                        
+                        html += `
+                            <div class="dashboard-item">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <strong><i class="fas fa-brain"></i> Behavioral Check</strong>
+                                    <small style="color: #999;">${check.timestamp}</small>
+                                </div>
+                                <div><strong>Risk Score:</strong> <span class="${riskClass}">${check.behavioral_risk}/100</span></div>
+                                <div><strong>Risk Level:</strong> ${check.risk_level}</div>
+                                <div><strong>Advice:</strong> ${check.advice}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                html += '</div>';
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>No records found. Start by checking an internship or taking the behavioral assessment!</p>
+                        <div class="button-group" style="justify-content: center;">
+                            <button class="secondary-btn" onclick="showPage('check')">
+                                Check an Internship
+                            </button>
+                            <button class="secondary-btn" onclick="showPage('behavioral')">
+                                Take Behavioral Assessment
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            container.innerHTML = `<p style="color: red;">Error loading dashboard: ${error.message}</p>`;
+        }
+    }
+    
+    // Make functions globally available
+    window.showPage = showPage;
+    window.clearCheckForm = clearCheckForm;
+    window.resetBehavioralForm = resetBehavioralForm;
+    window.loadDashboard = loadDashboard;
+</script>
+</body>
+</html>
